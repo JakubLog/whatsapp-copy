@@ -7,4 +7,6 @@ export const Wrapper = styled.div`
   position: absolute;
   z-index: 10;
   box-shadow: ${({ theme }) => theme.shadows.primary};
+  display: grid;
+  grid-template-columns: 30% 70%;
 `;
