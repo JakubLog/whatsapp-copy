@@ -1,16 +1,4 @@
-export interface themeProps {
-  colors: {
-    tealGreen: string;
-    tealGreenDark: string;
-    lightGreen: string;
-    blue: string;
-  };
-  shadows: {
-    primary: string;
-  };
-}
-
-export const theme: themeProps = {
+export const theme = {
   colors: {
     tealGreen: '#128C7E',
     tealGreenDark: '#075E54',

@@ -1,14 +1,20 @@
+import MainTemplate from 'components/templates/MainTemplate';
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import styled from 'styled-components';
+
+export const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dddbd1;
+  height: 100vh;
+`;
 
 const App: React.FC = () => {
   return (
-    <Switch>
-      <Route path="/" exact>
-        Hello world!
-      </Route>
-      <Route path="*">Error</Route>
-    </Switch>
+    <Wrapper>
+      <MainTemplate />
+    </Wrapper>
   );
 };
 
