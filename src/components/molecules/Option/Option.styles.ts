@@ -12,6 +12,7 @@ export const List = styled.ul`
   position: absolute;
   width: max-content;
   border-radius: 5px;
+  z-index: 10000;
   height: auto;
   overflow: hidden;
   background-color: white;
