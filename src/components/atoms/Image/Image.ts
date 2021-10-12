@@ -5,6 +5,6 @@ export const Image = styled.img`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  min-width: 100%;
+  width: 100%;
   min-height: 100%;
 `;
