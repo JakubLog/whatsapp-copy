@@ -1,12 +1,35 @@
 import styled from 'styled-components';
 
+export const IconWrapper = styled.div`
+  position: absolute;
+  top: 65%;
+  transition: transform 0.1s ease-out;
+  transform: translate(100%, -50%);
+  right: 0;
+  width: 30px;
+  height: 25px;
+  background-color: #fff;
+`;
+export const Icon = styled.img`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.8;
+  width: 60%;
+`;
 export const Wrapper = styled.div`
   height: 72px;
   display: flex;
+  position: relative;
   &:hover,
   &:focus {
     background-color: #eee;
     cursor: pointer;
+    ${IconWrapper} {
+      transform: translate(0, -50%);
+      background-color: #eee;
+    }
   }
 `;
 export const ImageWrapper = styled.div`

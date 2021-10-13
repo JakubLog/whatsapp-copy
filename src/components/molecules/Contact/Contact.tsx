@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ProfileImage from '../ProfileImage/ProfileImage';
-import { Wrapper, ImageWrapper, Content, LastMessage, Date } from './Contact.styles';
+import { Wrapper, ImageWrapper, Content, LastMessage, Date, Icon, IconWrapper } from './Contact.styles';
 import { ContactName } from 'components/atoms/ContactName/ContactName';
 
 interface props {
@@ -27,6 +27,9 @@ const Contact: React.FC<props> = ({
         <LastMessage>{lastMsg}</LastMessage>
         <Date>{date}</Date>
       </Content>
+      <IconWrapper>
+        <Icon src="https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-tick-vector-icon-png-image_696437.jpg" />
+      </IconWrapper>
     </Wrapper>
   );
 };
