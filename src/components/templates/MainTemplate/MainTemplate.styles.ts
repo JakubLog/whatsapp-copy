@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
@@ -8,10 +7,6 @@ export const Wrapper = styled.div`
   position: absolute;
   z-index: 10;
   box-shadow: ${({ theme }) => theme.shadows.primary};
+  display: grid;
+  grid-template-columns: 30% 70%;
 `;
-
-const MainTemplate: React.FC = () => {
-  return <Wrapper></Wrapper>;
-};
-
-export default MainTemplate;
