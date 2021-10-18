@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Wrapper } from './Options.styles';
 import Option from 'components/molecules/Option/Option';

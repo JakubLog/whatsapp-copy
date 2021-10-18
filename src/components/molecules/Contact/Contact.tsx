@@ -18,7 +18,7 @@ const Contact: React.FC<props> = ({
   img = 'https://st4.depositphotos.com/4329009/19956/v/600/depositphotos_199564354-stock-illustration-creative-vector-illustration-default-avatar.jpg'
 }) => {
   return (
-    <Wrapper title={name}>
+    <Wrapper tabIndex={0} title={name}>
       <ImageWrapper>
         <ProfileImage src={img} size={48} />
       </ImageWrapper>
