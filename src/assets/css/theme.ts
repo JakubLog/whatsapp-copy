@@ -2,7 +2,7 @@ export const theme = {
   colors: {
     tealGreen: '#128C7E',
     tealGreenDark: '#075E54',
-    lightGreen: '#25D366',
+    lightGreen: '#dcf8c6',
     blue: '#34B7F1'
   },
   shadows: {
