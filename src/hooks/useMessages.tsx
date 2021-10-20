@@ -14,6 +14,7 @@ type messagesArray = [
 ];
 interface messageTypes {
   messages: messagesArray;
+  loading: boolean;
 }
 
 // Initial object for Context
@@ -24,7 +25,8 @@ const initialMessage = {
 };
 
 const initialObject: messageTypes = {
-  messages: [initialMessage]
+  messages: [initialMessage],
+  loading: true
 };
 
 // TEMP OBJECT
@@ -36,8 +38,10 @@ const MessagesContext = createContext<messageTypes>(initialObject);
 const MessagesProvider: React.FC = ({ children }) => {
   const contact = useSelector<storeRoot, storeResponse | null>((store) => store.chat);
   const [messages, setMessages] = useState<messagesArray>([initialMessage]);
+  const [loading, setLoadingState] = useState(true);
 
   useEffect(() => {
+    setLoadingState(true);
     const path = `${currentUser.name}/messages/${contact?.name}`;
     const messagesRef = collection(db, path);
     const unsub = onSnapshot(query(messagesRef, orderBy('date', 'asc')), (snapshots) => {
@@ -45,12 +49,14 @@ const MessagesProvider: React.FC = ({ children }) => {
       temp.pop();
       snapshots.forEach((snapshot) => temp.push({ value: snapshot.get('value'), date: snapshot.get('date'), stream: snapshot.get('stream') }));
       setMessages(temp);
+      setLoadingState(false);
     });
     return () => unsub();
   }, [contact?.name]);
 
   const object: messageTypes = {
-    messages
+    messages,
+    loading
   };
 
   return <MessagesContext.Provider value={object}>{children}</MessagesContext.Provider>;
