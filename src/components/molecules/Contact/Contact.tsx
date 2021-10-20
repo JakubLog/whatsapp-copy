@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import { Wrapper, ImageWrapper, Content, LastMessage, Date, Icon, IconWrapper } from './Contact.styles';
 import { ContactName } from 'components/atoms/ContactName/ContactName';
+import { useDispatch } from 'react-redux';
+import { changeChat } from 'store';
 
 interface props {
   img?: string;
@@ -17,8 +19,9 @@ const Contact: React.FC<props> = ({
   date,
   img = 'https://st4.depositphotos.com/4329009/19956/v/600/depositphotos_199564354-stock-illustration-creative-vector-illustration-default-avatar.jpg'
 }) => {
+  const dispatch = useDispatch();
   return (
-    <Wrapper tabIndex={0} title={name}>
+    <Wrapper tabIndex={0} title={name} onClick={() => dispatch(changeChat({ name, img }))}>
       <ImageWrapper>
         <ProfileImage src={img} size={48} />
       </ImageWrapper>

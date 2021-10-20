@@ -11,7 +11,7 @@ const Contacts: React.FC = () => {
         name="Jakub Michał Fedoszczak"
         img="https://picsum.photos/100"
       />
-      <Contact date="18.01.2007" lastMsg="Siema ziomek, to idziemy na tą impreze czy nie?" name="Jakub Michał Fedoszczak" />
+      <Contact date="18.01.2007" lastMsg="Siema ziomek, to idziemy na tą impreze czy nie?" name="Mariusz Pudzianowski" />
     </Wrapper>
   );
 };
