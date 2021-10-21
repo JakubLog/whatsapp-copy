@@ -10,6 +10,10 @@ const Messages: React.FC = () => {
     <Wrapper tabIndex={0}>
       {loading ? (
         <Loading />
+      ) : !messages.length ? (
+        <p>
+          Nie ma tutaj żadnych wiadomości! <br /> Napisz nową, aby coś tutaj się pojawiło. Czekamy!
+        </p>
       ) : (
         messages.map(({ value, date, stream }) => (
           <Message key={`key-${Math.round(Math.random() * 1000)}`} data-time={date} Outgoing={stream === 'outgoing'}>

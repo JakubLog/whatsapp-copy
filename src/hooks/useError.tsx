@@ -16,7 +16,7 @@ const ErrorProvider: React.FC = ({ children }) => {
 
   const dispatchError = (userError: Error, adminError: Error | unknown) => {
     if (adminError instanceof Error)
-      console.error(`!ERROR ${adminError.name}${adminError?.stack ? ` - ${adminError?.stack}` : null} | ${adminError.message}`);
+      console.error(`!ERROR | ${adminError.name}${adminError?.stack ? ` - ${adminError?.stack}` : null} | ${adminError.message}`);
     setError(userError.message);
     setTimeout(() => {
       setError(null);

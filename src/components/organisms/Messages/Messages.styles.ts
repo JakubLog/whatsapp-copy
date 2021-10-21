@@ -10,6 +10,18 @@ export const Wrapper = styled.div`
       margin-bottom: 20px;
     }
   }
+  p {
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    opacity: 0.4;
+    width: fit-content;
+    margin: 0 auto;
+    padding-inline: 30px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 10px;
+  }
 `;
 
 export const Message = styled.div<{ Outgoing?: boolean }>`
