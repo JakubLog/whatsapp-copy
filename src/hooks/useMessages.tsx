@@ -47,6 +47,7 @@ const MessagesProvider: React.FC = ({ children }) => {
       setLoadingState(true);
       const path = `${currentUser.name}/messages/${contact?.name}`;
       const messagesRef = collection(db, path);
+      // throw new Error('Problem');
       const unsub = onSnapshot(query(messagesRef, orderBy('date', 'asc')), (snapshots) => {
         const temp: messagesArray = [initialMessage];
         temp.pop();
@@ -59,6 +60,7 @@ const MessagesProvider: React.FC = ({ children }) => {
       const user = new Error("We now can't fetch your messages. Please contact with administration!");
       if (e instanceof Error) dispatchError(user, e);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contact?.name]);
 
   const object: messageTypes = {
