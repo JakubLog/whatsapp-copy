@@ -20,7 +20,7 @@ const ErrorProvider: React.FC = ({ children }) => {
     setError(userError.message);
     setTimeout(() => {
       setError(null);
-    }, 6000);
+    }, 10000);
   };
 
   const object: errorTypes = {
