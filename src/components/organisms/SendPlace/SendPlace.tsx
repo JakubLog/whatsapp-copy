@@ -2,12 +2,22 @@ import Icon from 'components/atoms/Icon/Icon';
 import React from 'react';
 import { Wrapper, StyledInput } from './SendPlace.styles';
 import { useForm } from 'react-hook-form';
+import { useMessages } from 'hooks/useMessages';
+import { useError } from 'hooks/useError';
 
 const SendPlace: React.FC = () => {
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, reset } = useForm();
+  const { send } = useMessages();
+  const { dispatchError } = useError();
 
-  const process = ({ value }: { value: string }) => {
-    console.log(value);
+  const process = async ({ value }: { value: string }) => {
+    try {
+      await send(value);
+      reset();
+    } catch (e) {
+      const user = "Sorry, we can't now send this message. Please try again later or contact with our support!";
+      dispatchError(new Error(user), e);
+    }
   };
 
   return (

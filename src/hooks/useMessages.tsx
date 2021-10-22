@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from 'firebase';
 import { storeResponse, storeRoot } from 'store';
 import { useSelector } from 'react-redux';
@@ -9,25 +9,27 @@ import { useError } from 'hooks/useError';
 type messagesArray = [
   {
     value: string;
-    date: string;
+    date: Timestamp;
     stream: string;
   }
 ];
 interface messageTypes {
   messages: messagesArray;
   loading: boolean;
+  send: (message: string) => void;
 }
 
 // Initial object for Context
 const initialMessage = {
   value: '',
-  date: '',
+  date: new Timestamp(323, 323),
   stream: ''
 };
 
 const initialObject: messageTypes = {
   messages: [initialMessage],
-  loading: true
+  loading: true,
+  send: (message: string) => console.log(message)
 };
 
 // TEMP OBJECT
@@ -41,12 +43,12 @@ const MessagesProvider: React.FC = ({ children }) => {
   const [messages, setMessages] = useState<messagesArray>([initialMessage]);
   const [loading, setLoadingState] = useState(true);
   const { dispatchError } = useError();
+  const pathToContact = `${currentUser.name}/messages/${contact?.name}`;
 
   useEffect(() => {
     try {
       setLoadingState(true);
-      const path = `${currentUser.name}/messages/${contact?.name}`;
-      const messagesRef = collection(db, path);
+      const messagesRef = collection(db, pathToContact);
       // throw new Error('Problem');
       const unsub = onSnapshot(query(messagesRef, orderBy('date', 'asc')), (snapshots) => {
         const temp: messagesArray = [initialMessage];
@@ -63,8 +65,23 @@ const MessagesProvider: React.FC = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contact?.name]);
 
+  const send = async (message: string) => {
+    try {
+      const date = new Date();
+      await addDoc(collection(db, pathToContact), {
+        date,
+        stream: 'outgoing',
+        value: message
+      });
+    } catch (e) {
+      const user = new Error("We now can't send your message. Please contact with administration!");
+      if (e instanceof Error) dispatchError(user, e);
+    }
+  };
+
   const object: messageTypes = {
     messages,
+    send,
     loading
   };
 
