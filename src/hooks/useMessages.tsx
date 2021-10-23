@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { collection, onSnapshot, orderBy, query, addDoc, Timestamp } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query, addDoc, getDocs, Timestamp } from 'firebase/firestore';
 import { db } from 'firebase';
 import { storeResponse, storeRoot } from 'store';
 import { useSelector } from 'react-redux';
@@ -17,6 +18,7 @@ interface messageTypes {
   messages: messagesArray;
   loading: boolean;
   send: (message: string) => void;
+  getLastMsgInfo: (contactName: string) => Record<any, any>;
 }
 
 // Initial object for Context
@@ -29,7 +31,8 @@ const initialMessage = {
 const initialObject: messageTypes = {
   messages: [initialMessage],
   loading: true,
-  send: (message: string) => console.log(message)
+  send: (message: string) => console.log(message),
+  getLastMsgInfo: (contactName: string) => ({ contactName })
 };
 
 // TEMP OBJECT
@@ -79,10 +82,29 @@ const MessagesProvider: React.FC = ({ children }) => {
     }
   };
 
+  const getLastMsgInfo = async (contactName: string) => {
+    try {
+      const records: any[] = [];
+      const preparedQuery = query(collection(db, `${currentUser.name}/messages/${contactName}`), orderBy('date', 'desc'));
+      const docs = await getDocs(preparedQuery);
+      docs.forEach((doc) => {
+        records.push({ date: doc.get('date'), value: doc.get('value') });
+      });
+      return {
+        value: records[0].value,
+        date: records[0].date
+      };
+    } catch (e) {
+      const user = new Error("We now can't get your last messages. Please contact with administration!");
+      if (e instanceof Error) dispatchError(user, e);
+    }
+  };
+
   const object: messageTypes = {
     messages,
     send,
-    loading
+    loading,
+    getLastMsgInfo
   };
 
   return <MessagesContext.Provider value={object}>{children}</MessagesContext.Provider>;
