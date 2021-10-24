@@ -7,19 +7,22 @@ import { store } from 'store';
 import MessagesProvider from 'hooks/useMessages';
 import ErrorProvider from 'hooks/useError';
 import ContactsProvider from 'hooks/useContacts';
+import AuthProvider from 'hooks/useAuth';
 
 const AppProviders: React.FC = ({ children }) => {
   return (
     <Provider store={store}>
       <ErrorProvider>
-        <MessagesProvider>
-          <ContactsProvider>
-            <ThemeProvider theme={theme}>
-              <GlobalStyles />
-              {children}
-            </ThemeProvider>
-          </ContactsProvider>
-        </MessagesProvider>
+        <AuthProvider>
+          <MessagesProvider>
+            <ContactsProvider>
+              <ThemeProvider theme={theme}>
+                <GlobalStyles />
+                {children}
+              </ThemeProvider>
+            </ContactsProvider>
+          </MessagesProvider>
+        </AuthProvider>
       </ErrorProvider>
     </Provider>
   );

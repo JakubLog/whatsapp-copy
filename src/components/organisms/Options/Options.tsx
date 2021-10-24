@@ -2,8 +2,14 @@
 import React from 'react';
 import { Wrapper } from './Options.styles';
 import Option from 'components/molecules/Option/Option';
+import { useAuth } from 'hooks/useAuth';
+import { changeChat } from 'store';
+import { useDispatch } from 'react-redux';
 
 const Options: React.FC = () => {
+  const { logout } = useAuth();
+  const dispatch = useDispatch();
+
   return (
     <Wrapper>
       <Option iconSrc="https://cdn3.iconfinder.com/data/icons/project-management-32/48/11-512.png">
@@ -14,7 +20,15 @@ const Options: React.FC = () => {
         <a href="#">Zarchiwizowane</a>
         <a href="#">Oznaczone gwiazdką</a>
         <a href="#">Ustawienia</a>
-        <a href="#">Wyloguj</a>
+        <a
+          href="#"
+          onClick={() => {
+            dispatch(changeChat(null));
+            logout();
+          }}
+        >
+          Wyloguj
+        </a>
       </Option>
     </Wrapper>
   );

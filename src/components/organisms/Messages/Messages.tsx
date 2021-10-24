@@ -3,13 +3,11 @@ import { Wrapper, Message } from './Messages.styles';
 import { useMessages } from 'hooks/useMessages';
 import Loading from 'components/molecules/Loading/Loading';
 import { format } from 'date-fns';
-
-const currentUser = {
-  name: 'Jakub Michał Fedoszczak'
-};
+import { useAuth } from 'hooks/useAuth';
 
 const Messages: React.FC = () => {
   const { messages, loading } = useMessages();
+  const { currentUser } = useAuth();
 
   return (
     <Wrapper tabIndex={0}>

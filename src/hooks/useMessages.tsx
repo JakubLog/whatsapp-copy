@@ -5,6 +5,7 @@ import { db } from 'firebase';
 import { storeResponse, storeRoot } from 'store';
 import { useSelector } from 'react-redux';
 import { useError } from 'hooks/useError';
+import { useAuth } from './useAuth';
 
 // Interface & Types for hook
 type messagesArray = [
@@ -35,14 +36,9 @@ const initialObject: messageTypes = {
   getLastMsgInfo: (contactName: string) => ({ contactName })
 };
 
-// TEMP OBJECT
-const currentUser = {
-  id: '323jsdk',
-  name: 'Jakub Michał Fedoszczak'
-};
-
 const MessagesContext = createContext<messageTypes>(initialObject);
 const MessagesProvider: React.FC = ({ children }) => {
+  const { currentUser } = useAuth();
   const contact = useSelector<storeRoot, storeResponse | null>((store) => store.chat);
   const [messages, setMessages] = useState<messagesArray>([initialMessage]);
   const [chatId, setChatId] = useState<string | null>(null);
@@ -50,34 +46,45 @@ const MessagesProvider: React.FC = ({ children }) => {
   const { dispatchError } = useError();
 
   useEffect(() => {
-    try {
-      setLoadingState(true);
-      const messagesRef = collection(db, `MESSAGES`);
-      const q_id = query(messagesRef, where('owners', '==', [currentUser.name, contact?.name || '']));
-      getDocs(q_id).then((docs) => {
-        docs.forEach((doc) => {
-          setChatId(doc.id);
-        });
-      });
-      if (chatId) {
-        const q_chat = query(collection(db, `MESSAGES/${chatId}/chat`), orderBy('date', 'asc'));
-        const unsub = onSnapshot(q_chat, (docs) => {
-          const temp: messagesArray = [initialMessage];
-          temp.pop();
+    if (currentUser) {
+      try {
+        setLoadingState(true);
+        const messagesRef = collection(db, `MESSAGES`);
+        const q_id = query(
+          messagesRef,
+          where('owners', 'in', [
+            [currentUser.name, contact?.name || ''],
+            [contact?.name || '', currentUser.name]
+          ])
+        );
+        getDocs(q_id).then((docs) => {
           docs.forEach((doc) => {
-            temp.push({ date: doc.get('date'), owner: doc.get('owner'), value: doc.get('value') });
+            setChatId(doc.id);
           });
-          setMessages(temp);
-          setLoadingState(false);
         });
-        return () => unsub();
+        if (chatId) {
+          const q_chat = query(collection(db, `MESSAGES/${chatId}/chat`), orderBy('date', 'asc'));
+          const unsub = onSnapshot(q_chat, (docs) => {
+            const temp: messagesArray = [initialMessage];
+            temp.pop();
+            docs.forEach((doc) => {
+              temp.push({ date: doc.get('date'), owner: doc.get('owner'), value: doc.get('value') });
+            });
+            setMessages(temp);
+            setLoadingState(false);
+          });
+          return () => {
+            unsub();
+            setChatId(null);
+          };
+        }
+      } catch (e) {
+        const user = new Error("We now can't fetch your messages. Please contact with administration!");
+        if (e instanceof Error) dispatchError(user, e);
       }
-    } catch (e) {
-      const user = new Error("We now can't fetch your messages. Please contact with administration!");
-      if (e instanceof Error) dispatchError(user, e);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contact?.name, chatId]);
+  }, [contact?.name, chatId, currentUser]);
 
   const send = async (message: string) => {
     try {
@@ -96,7 +103,13 @@ const MessagesProvider: React.FC = ({ children }) => {
   const getLastMsgInfo = async (contactName: string) => {
     try {
       const messagesRef = collection(db, `MESSAGES`);
-      const q_id = query(messagesRef, where('owners', '==', [currentUser.name, contactName]));
+      const q_id = query(
+        messagesRef,
+        where('owners', 'in', [
+          [currentUser.name, contactName],
+          [contactName, currentUser.name]
+        ])
+      );
       let id = '';
       await getDocs(q_id).then((docs) => {
         docs.forEach((doc) => {
