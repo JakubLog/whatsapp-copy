@@ -4,6 +4,10 @@ import { useMessages } from 'hooks/useMessages';
 import Loading from 'components/molecules/Loading/Loading';
 import { format } from 'date-fns';
 
+const currentUser = {
+  name: 'Jakub Michał Fedoszczak'
+};
+
 const Messages: React.FC = () => {
   const { messages, loading } = useMessages();
 
@@ -16,12 +20,12 @@ const Messages: React.FC = () => {
           Nie ma tutaj żadnych wiadomości! <br /> Napisz nową, aby coś tutaj się pojawiło. Czekamy!
         </p>
       ) : (
-        messages.map(({ value, date, stream }) => {
+        messages.map(({ value, date, owner }) => {
           return (
             <Message
               key={`key-${Math.round(Math.random() * 1000)}`}
               data-time={format(Number(date.toDate()), 'HH:mm')}
-              Outgoing={stream === 'outgoing'}
+              Outgoing={owner === currentUser.name}
             >
               {value}
             </Message>

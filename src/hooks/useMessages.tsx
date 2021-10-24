@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { collection, onSnapshot, orderBy, query, addDoc, getDocs, Timestamp } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query, addDoc, getDocs, Timestamp, where } from 'firebase/firestore';
 import { db } from 'firebase';
 import { storeResponse, storeRoot } from 'store';
 import { useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ type messagesArray = [
   {
     value: string;
     date: Timestamp;
-    stream: string;
+    owner: string;
   }
 ];
 interface messageTypes {
@@ -25,7 +25,7 @@ interface messageTypes {
 const initialMessage = {
   value: '',
   date: new Timestamp(323, 323),
-  stream: ''
+  owner: ''
 };
 
 const initialObject: messageTypes = {
@@ -37,44 +37,55 @@ const initialObject: messageTypes = {
 
 // TEMP OBJECT
 const currentUser = {
-  name: 'kontakt.jakubfedoszczak@gmail.com'
+  id: '323jsdk',
+  name: 'Jakub Michał Fedoszczak'
 };
 
 const MessagesContext = createContext<messageTypes>(initialObject);
 const MessagesProvider: React.FC = ({ children }) => {
   const contact = useSelector<storeRoot, storeResponse | null>((store) => store.chat);
   const [messages, setMessages] = useState<messagesArray>([initialMessage]);
+  const [chatId, setChatId] = useState<string | null>(null);
   const [loading, setLoadingState] = useState(true);
   const { dispatchError } = useError();
-  const pathToContact = `${currentUser.name}/messages/${contact?.name}`;
 
   useEffect(() => {
     try {
       setLoadingState(true);
-      const messagesRef = collection(db, pathToContact);
-      // throw new Error('Problem');
-      const unsub = onSnapshot(query(messagesRef, orderBy('date', 'asc')), (snapshots) => {
-        const temp: messagesArray = [initialMessage];
-        temp.pop();
-        snapshots.forEach((snapshot) => temp.push({ value: snapshot.get('value'), date: snapshot.get('date'), stream: snapshot.get('stream') }));
-        setMessages(temp);
-        setLoadingState(false);
+      const messagesRef = collection(db, `MESSAGES`);
+      const q_id = query(messagesRef, where('owners', '==', [currentUser.name, contact?.name || '']));
+      getDocs(q_id).then((docs) => {
+        docs.forEach((doc) => {
+          setChatId(doc.id);
+        });
       });
-      return () => unsub();
+      if (chatId) {
+        const q_chat = query(collection(db, `MESSAGES/${chatId}/chat`), orderBy('date', 'asc'));
+        const unsub = onSnapshot(q_chat, (docs) => {
+          const temp: messagesArray = [initialMessage];
+          temp.pop();
+          docs.forEach((doc) => {
+            temp.push({ date: doc.get('date'), owner: doc.get('owner'), value: doc.get('value') });
+          });
+          setMessages(temp);
+          setLoadingState(false);
+        });
+        return () => unsub();
+      }
     } catch (e) {
       const user = new Error("We now can't fetch your messages. Please contact with administration!");
       if (e instanceof Error) dispatchError(user, e);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contact?.name]);
+  }, [contact?.name, chatId]);
 
   const send = async (message: string) => {
     try {
       const date = new Date();
-      await addDoc(collection(db, pathToContact), {
+      await addDoc(collection(db, `MESSAGES/${chatId}/chat`), {
         date,
-        stream: 'outgoing',
-        value: message
+        value: message,
+        owner: currentUser.name
       });
     } catch (e) {
       const user = new Error("We now can't send your message. Please contact with administration!");
@@ -84,8 +95,16 @@ const MessagesProvider: React.FC = ({ children }) => {
 
   const getLastMsgInfo = async (contactName: string) => {
     try {
+      const messagesRef = collection(db, `MESSAGES`);
+      const q_id = query(messagesRef, where('owners', '==', [currentUser.name, contactName]));
+      let id = '';
+      await getDocs(q_id).then((docs) => {
+        docs.forEach((doc) => {
+          id = doc.id;
+        });
+      });
       const records: any[] = [];
-      const preparedQuery = query(collection(db, `${currentUser.name}/messages/${contactName}`), orderBy('date', 'desc'));
+      const preparedQuery = query(collection(db, `MESSAGES/${id}/chat`), orderBy('date', 'desc'));
       const docs = await getDocs(preparedQuery);
       docs.forEach((doc) => {
         records.push({ date: doc.get('date'), value: doc.get('value') });

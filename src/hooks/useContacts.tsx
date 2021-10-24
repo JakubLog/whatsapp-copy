@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, createContext, useState, useContext } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from 'firebase';
 import { useError } from './useError';
 import { useMessages } from 'hooks/useMessages';
@@ -14,7 +14,8 @@ const initialObject: contactsTypes = {
 };
 
 const currentUser = {
-  name: 'kontakt.jakubfedoszczak@gmail.com'
+  id: '323jsdk',
+  name: 'Jakub Michał Fedoszczak'
 };
 
 const ContactsContext = createContext<contactsTypes>(initialObject);
@@ -23,19 +24,21 @@ const ContactsProvider: React.FC = ({ children }) => {
   const { dispatchError } = useError();
   const { getLastMsgInfo } = useMessages();
 
-  const path = `${currentUser.name}/profile/contacts`;
-  const contactsRef = collection(db, path);
-
   useEffect(() => {
     (async () => {
       try {
-        const response = await getDocs(contactsRef);
+        const idResponse = await getDocs(query(collection(db, 'PROFILES'), where('id', '==', currentUser.id)));
+        let id = '';
+        idResponse.forEach((res) => {
+          id = res.id;
+        });
+        const response = await getDocs(collection(db, `PROFILES/${id}/contacts`));
         const convertedArray: any[] = [];
         response.forEach((r) => convertedArray.push(r));
         const temp: any[] = [];
         for await (const snapshot of convertedArray) {
           const lastMsg = await getLastMsgInfo(snapshot.get('name'));
-          temp.push({ name: snapshot.get('name'), image: snapshot.get('image'), lastMsg });
+          temp.push({ id: snapshot.get('id'), name: snapshot.get('name'), image: snapshot.get('image'), lastMsg });
         }
         setContacts(temp);
       } catch (e) {
