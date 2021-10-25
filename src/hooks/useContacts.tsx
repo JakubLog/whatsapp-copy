@@ -8,16 +8,19 @@ import { useAuth } from './useAuth';
 
 interface contactsTypes {
   contacts: any[];
+  loading: boolean;
 }
 
 const initialObject: contactsTypes = {
-  contacts: []
+  contacts: [],
+  loading: true
 };
 
 const ContactsContext = createContext<contactsTypes>(initialObject);
 const ContactsProvider: React.FC = ({ children }) => {
   const { currentUser } = useAuth();
   const [contacts, setContacts] = useState<any[]>([]);
+  const [loading, setLoadingState] = useState(true);
   const { dispatchError } = useError();
   const { getLastMsgInfo } = useMessages();
 
@@ -25,6 +28,7 @@ const ContactsProvider: React.FC = ({ children }) => {
     (async () => {
       if (currentUser) {
         try {
+          setLoadingState(true);
           const idResponse = await getDocs(query(collection(db, 'PROFILES'), where('id', '==', currentUser.id)));
           let id = '';
           idResponse.forEach((res) => {
@@ -39,6 +43,7 @@ const ContactsProvider: React.FC = ({ children }) => {
             temp.push({ id: snapshot.get('id'), name: snapshot.get('name'), image: snapshot.get('image'), lastMsg });
           }
           setContacts(temp);
+          setLoadingState(false);
         } catch (e) {
           const user = new Error('Sorry, now we cannot get your contacts. Please try again or contact with our support!');
           dispatchError(user, e);
@@ -49,7 +54,8 @@ const ContactsProvider: React.FC = ({ children }) => {
   }, [currentUser]);
 
   const object: contactsTypes = {
-    contacts
+    contacts,
+    loading
   };
 
   return <ContactsContext.Provider value={object}>{children}</ContactsContext.Provider>;
