@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   overflow-y: auto;
   background-color: #e5ddd5;
-  padding-top: 30px;
+  padding-block: 30px;
   padding-inline: 90px;
   & > * {
     &:not(:last-child) {
@@ -21,6 +21,15 @@ export const Wrapper = styled.div`
     padding-inline: 30px;
     border-bottom: 1px solid #000;
     padding-bottom: 10px;
+  }
+  ::-webkit-scrollbar {
+    width: 7px;
+    background-color: #eee;
+    overflow: hidden;
+  }
+  ::-webkit-scrollbar-thumb {
+    opacity: 0.8;
+    background-color: ${({ theme }) => theme.colors.blue};
   }
 `;
 
