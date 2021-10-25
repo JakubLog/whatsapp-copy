@@ -9,7 +9,7 @@ import { Form } from 'components/atoms/Form/Form';
 import { Button } from 'components/atoms/Button/Button';
 
 const MainTemplate: React.FC = () => {
-  const { currentUser, signIn } = useAuth();
+  const { currentUser, signIn, loading } = useAuth();
   const [isError, setError] = useState(false);
   const {
     register,
@@ -42,6 +42,7 @@ const MainTemplate: React.FC = () => {
             {(errors.email || errors.password) && <p>Wszystkie pola muszą być uzupełnione!</p>}
             <Button>Zaloguj się</Button>
           </Form>
+          {loading && <p>Pobieranie informacji...</p>}
         </AuthWrapper>
       )}
     </Wrapper>

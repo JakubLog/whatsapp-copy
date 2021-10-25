@@ -10,17 +10,20 @@ interface authTypes {
   currentUser: any;
   signIn: (email: string, password: string) => Promise<UserCredential | void>;
   logout: () => Promise<void>;
+  loading: boolean;
 }
 
 const initialObject: authTypes = {
   currentUser: null,
   signIn: (email: string, password: string) => Promise.resolve(console.log(email)),
-  logout: () => Promise.resolve(console.log('Wylogowywanie...'))
+  logout: () => Promise.resolve(console.log('Wylogowywanie...')),
+  loading: true
 };
 
 const AuthContext = createContext<authTypes>(initialObject);
 const AuthProvider: React.FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<null | User>(null);
+  const [loading, setLoadingState] = useState(true);
   const { dispatchError } = useError();
 
   useEffect(() => {
@@ -41,6 +44,7 @@ const AuthProvider: React.FC = ({ children }) => {
           } else {
             setCurrentUser(null);
           }
+          setLoadingState(false);
         });
         return () => {
           unsub();
@@ -60,7 +64,8 @@ const AuthProvider: React.FC = ({ children }) => {
   const object: authTypes = {
     currentUser,
     signIn,
-    logout
+    logout,
+    loading
   };
   return <AuthContext.Provider value={object}>{children}</AuthContext.Provider>;
 };
