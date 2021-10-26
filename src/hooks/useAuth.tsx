@@ -1,7 +1,9 @@
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut, User, UserCredential } from '@firebase/auth';
-import { collection, getDocs } from '@firebase/firestore';
+import { collection, getDocs, setDoc } from '@firebase/firestore';
+import { nanoid } from '@reduxjs/toolkit';
 import { auth, db } from 'firebase';
-import { query, where } from 'firebase/firestore';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { addDoc, doc, query, where } from 'firebase/firestore';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useError } from './useError';
 
@@ -11,13 +13,15 @@ interface authTypes {
   signIn: (email: string, password: string) => Promise<UserCredential | void>;
   logout: () => Promise<void>;
   loading: boolean;
+  createAccount: (name: string, email: string, password: string, image?: string) => Promise<void>;
 }
 
 const initialObject: authTypes = {
   currentUser: null,
   signIn: (email: string, password: string) => Promise.resolve(console.log(email)),
   logout: () => Promise.resolve(console.log('Wylogowywanie...')),
-  loading: true
+  loading: true,
+  createAccount: (email: string, password: string, name: string, image?: string) => Promise.resolve(console.log(email))
 };
 
 const AuthContext = createContext<authTypes>(initialObject);
@@ -61,12 +65,29 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const signIn = (email: string, password: string) => signInWithEmailAndPassword(auth, email, password);
   const logout = () => signOut(auth);
+  const createAccount = async (name: string, email: string, password: string, image?: string) => {
+    try {
+      console.log(email);
+      await createUserWithEmailAndPassword(auth, email, password);
+      const createdUserId = nanoid();
+      const preparedUserObject = {
+        id: createdUserId,
+        name,
+        email
+      };
+      await setDoc(doc(db, `PROFILES/${createdUserId}`), image ? Object.assign(preparedUserObject, { image }) : preparedUserObject);
+    } catch (e) {
+      const userError = new Error('Sorry, something went wrong when we were trying to create your account!');
+      dispatchError(userError, e);
+    }
+  };
 
   const object: authTypes = {
     currentUser,
     signIn,
     logout,
-    loading
+    loading,
+    createAccount
   };
   return <AuthContext.Provider value={object}>{children}</AuthContext.Provider>;
 };
