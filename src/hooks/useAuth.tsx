@@ -36,7 +36,8 @@ const AuthProvider: React.FC = ({ children }) => {
             docs.forEach((doc) => {
               temp = {
                 name: doc.get('name'),
-                id: doc.get('id')
+                id: doc.get('id'),
+                image: doc.get('image')
               };
             });
             const readyUser = { ...user, ...temp };

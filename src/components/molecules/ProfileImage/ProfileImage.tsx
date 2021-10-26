@@ -8,7 +8,10 @@ interface props {
   size?: number;
 }
 
-const ProfileImage: React.FC<props> = ({ src, size = 37 }) => {
+const ProfileImage: React.FC<props> = ({
+  src = 'https://st4.depositphotos.com/4329009/19956/v/600/depositphotos_199564354-stock-illustration-creative-vector-illustration-default-avatar.jpg',
+  size = 37
+}) => {
   return (
     <Wrapper size={size}>
       <Image src={src} />
