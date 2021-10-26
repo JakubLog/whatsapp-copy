@@ -11,4 +11,10 @@ export const Wrapper = styled.div`
   grid-template-columns: 30% 70%;
 `;
 
-export const AuthWrapper = styled.div``;
+export const AuthWrapper = styled.div`
+  grid-column: 1/3;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

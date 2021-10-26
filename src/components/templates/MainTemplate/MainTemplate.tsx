@@ -14,13 +14,15 @@ const MainTemplate: React.FC = () => {
   const {
     register,
     formState: { errors },
-    handleSubmit
+    handleSubmit,
+    reset
   } = useForm();
 
   const process = async ({ email, password }: { email: string; password: string }) => {
     try {
       setError(false);
       await signIn(email, password);
+      reset();
     } catch (e) {
       setError(true);
     }
@@ -38,11 +40,9 @@ const MainTemplate: React.FC = () => {
           <Form onSubmit={handleSubmit(process)}>
             <FormField label="email" {...register('email', { required: true })} />
             <FormField label="password" type="password" {...register('password', { required: true })} />
-            {isError && <p>Niestety błąd!</p>}
             {(errors.email || errors.password) && <p>Wszystkie pola muszą być uzupełnione!</p>}
-            <Button>Zaloguj się</Button>
+            <Button>{loading ? 'Ładowanie...' : isError ? 'Spróbuj ponownie!' : 'Zaloguj się'}</Button>
           </Form>
-          {loading && <p>Pobieranie informacji...</p>}
         </AuthWrapper>
       )}
     </Wrapper>
