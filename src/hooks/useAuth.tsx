@@ -3,7 +3,7 @@ import { collection, getDocs, setDoc } from '@firebase/firestore';
 import { nanoid } from '@reduxjs/toolkit';
 import { auth, db } from 'firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { addDoc, doc, query, where } from 'firebase/firestore';
+import { doc, query, where } from 'firebase/firestore';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useError } from './useError';
 
