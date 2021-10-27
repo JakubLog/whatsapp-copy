@@ -7,13 +7,14 @@ import { StyledInput } from './FormField.styles';
 interface props {
   label: string;
   type?: string;
+  placeholder?: string;
 }
 
-const FormField = React.forwardRef<HTMLInputElement, props>(({ label, type = 'text', ...rest }, ref) => {
+const FormField = React.forwardRef<HTMLInputElement, props>(({ label, type = 'text', placeholder = '', ...rest }, ref) => {
   return (
     <Wrapper>
       <Label htmlFor={label}>{convertToName(label)}</Label>
-      <StyledInput id={label} type={type} ref={ref} {...rest} />
+      <StyledInput id={label} placeholder={placeholder} type={type} ref={ref} {...rest} />
     </Wrapper>
   );
 });

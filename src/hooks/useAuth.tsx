@@ -67,7 +67,7 @@ const AuthProvider: React.FC = ({ children }) => {
   const logout = () => signOut(auth);
   const createAccount = async (name: string, email: string, password: string, image?: string) => {
     try {
-      console.log(email);
+      setLoadingState(true);
       await createUserWithEmailAndPassword(auth, email, password);
       const createdUserId = nanoid();
       const preparedUserObject = {
@@ -76,9 +76,11 @@ const AuthProvider: React.FC = ({ children }) => {
         email
       };
       await setDoc(doc(db, `PROFILES/${createdUserId}`), image ? Object.assign(preparedUserObject, { image }) : preparedUserObject);
+      setLoadingState(false);
     } catch (e) {
       const userError = new Error('Sorry, something went wrong when we were trying to create your account!');
       dispatchError(userError, e);
+      setLoadingState(false);
     }
   };
 
