@@ -11,6 +11,7 @@ import { Button } from 'components/atoms/Button/Button';
 const MainTemplate: React.FC = () => {
   const { currentUser, signIn, loading, createAccount } = useAuth();
   const [isError, setError] = useState(false);
+  const [isErrorTwo, setErrorTwo] = useState(false);
   const {
     register,
     formState: { errors },
@@ -35,9 +36,24 @@ const MainTemplate: React.FC = () => {
     }
   };
 
-  const createAccountProcess = ({ name, newEmail, newPassword, image }: { name: string; newEmail: string; newPassword: string; image?: string }) => {
-    createAccount(name, newEmail, newPassword, image);
-    resetTwo();
+  const createAccountProcess = async ({
+    name,
+    newEmail,
+    newPassword,
+    image
+  }: {
+    name: string;
+    newEmail: string;
+    newPassword: string;
+    image?: string;
+  }) => {
+    try {
+      await createAccount(name, newEmail, newPassword, image);
+      resetTwo();
+    } catch (e) {
+      setErrorTwo(true);
+      // console.error(e);
+    }
   };
 
   return (
@@ -61,7 +77,7 @@ const MainTemplate: React.FC = () => {
             <FormField label="password" type="password" {...registerTwo('newPassword', { required: true })} />
             <FormField placeholder="Optional: link to photo" label="image" type="url" {...registerTwo('image', { required: false })} />
             {(errorsTwo.newEmail || errorsTwo.newPassword || errorsTwo.name) && <p>Trzy pierwsze pola muszą być uzupełnione!</p>}
-            <Button>{loading ? 'Ładowanie...' : 'Stwórz konto'}</Button>
+            <Button>{loading ? 'Ładowanie...' : isErrorTwo ? 'Coś nie tak...' : 'Stwórz konto'}</Button>
           </Form>
         </AuthWrapper>
       )}

@@ -66,22 +66,14 @@ const AuthProvider: React.FC = ({ children }) => {
   const signIn = (email: string, password: string) => signInWithEmailAndPassword(auth, email, password);
   const logout = () => signOut(auth);
   const createAccount = async (name: string, email: string, password: string, image?: string) => {
-    try {
-      setLoadingState(true);
-      await createUserWithEmailAndPassword(auth, email, password);
-      const createdUserId = nanoid();
-      const preparedUserObject = {
-        id: createdUserId,
-        name,
-        email
-      };
-      await setDoc(doc(db, `PROFILES/${createdUserId}`), image ? Object.assign(preparedUserObject, { image }) : preparedUserObject);
-      setLoadingState(false);
-    } catch (e) {
-      const userError = new Error('Sorry, something went wrong when we were trying to create your account!');
-      dispatchError(userError, e);
-      setLoadingState(false);
-    }
+    await createUserWithEmailAndPassword(auth, email, password);
+    const createdUserId = nanoid();
+    const preparedUserObject = {
+      id: createdUserId,
+      name,
+      email
+    };
+    await setDoc(doc(db, `PROFILES/${createdUserId}`), image ? Object.assign(preparedUserObject, { image }) : preparedUserObject);
   };
 
   const object: authTypes = {
