@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, createContext, useState, useContext, useCallback } from 'react';
+import React, { useEffect, createContext, useState, useContext } from 'react';
 import { addDoc, collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { db } from 'firebase';
 import { useError } from './useError';
@@ -39,7 +39,6 @@ const ContactsProvider: React.FC = ({ children }) => {
       const lastMsg = await getLastMsgInfo(snapshot.get('name'));
       temp.push({ id: snapshot.get('id'), name: snapshot.get('name'), image: snapshot.get('image'), lastMsg });
     }
-    console.log(response);
     setContacts(temp);
     setLoadingState(false);
   };
