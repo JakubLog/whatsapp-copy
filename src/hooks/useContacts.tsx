@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, createContext, useState, useContext } from 'react';
+import React, { useEffect, createContext, useState, useContext, useCallback } from 'react';
 import { addDoc, collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { db } from 'firebase';
 import { useError } from './useError';
@@ -29,30 +29,20 @@ const ContactsProvider: React.FC = ({ children }) => {
   const { dispatchError } = useError();
   const { getLastMsgInfo } = useMessages();
 
-  useEffect(() => {
-    (async () => {
-      if (currentUser) {
-        try {
-          setLoadingState(true);
-          const response = await getDocs(collection(db, `PROFILES/${currentUser.id}/contacts`));
-          const convertedArray: any[] = [];
-          response.forEach((r) => convertedArray.push(r));
-          const temp: any[] = [];
-          for await (const snapshot of convertedArray) {
-            const lastMsg = await getLastMsgInfo(snapshot.get('name'));
-            temp.push({ id: snapshot.get('id'), name: snapshot.get('name'), image: snapshot.get('image'), lastMsg });
-          }
-          console.log(response);
-          setContacts(temp);
-          setLoadingState(false);
-        } catch (e) {
-          const user = new Error('Sorry, now we cannot get your contacts. Please try again or contact with our support!');
-          dispatchError(user, e);
-        }
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  const getCurrentContacts = async () => {
+    setLoadingState(true);
+    const response = await getDocs(collection(db, `PROFILES/${currentUser.id}/contacts`));
+    const convertedArray: any[] = [];
+    response.forEach((r) => convertedArray.push(r));
+    const temp: any[] = [];
+    for await (const snapshot of convertedArray) {
+      const lastMsg = await getLastMsgInfo(snapshot.get('name'));
+      temp.push({ id: snapshot.get('id'), name: snapshot.get('name'), image: snapshot.get('image'), lastMsg });
+    }
+    console.log(response);
+    setContacts(temp);
+    setLoadingState(false);
+  };
 
   const checkContact = async (contactName: string): Promise<{ code: number; id?: string; name?: string; image?: string }> => {
     try {
@@ -80,7 +70,7 @@ const ContactsProvider: React.FC = ({ children }) => {
         const newContactPath = collection(db, `PROFILES/${currentUser.id}/contacts`);
         const newMessagePath = doc(db, `MESSAGES/${currentUser.id}__${response?.id}`);
         const newRecordOfContactPath = collection(db, `PROFILES/${response?.id}/contacts`);
-        addDoc(
+        await addDoc(
           newContactPath,
           response?.image
             ? {
@@ -90,10 +80,10 @@ const ContactsProvider: React.FC = ({ children }) => {
               }
             : { id: response?.id, name: contactName }
         );
-        setDoc(newMessagePath, {
+        await setDoc(newMessagePath, {
           owners: [currentUser.name, contactName]
         });
-        addDoc(
+        await addDoc(
           newRecordOfContactPath,
           currentUser?.image
             ? {
@@ -103,6 +93,7 @@ const ContactsProvider: React.FC = ({ children }) => {
               }
             : { id: currentUser.id, name: currentUser.name }
         );
+        getCurrentContacts();
         return { code: 201 };
       }
       return { code: 404 };
@@ -111,6 +102,20 @@ const ContactsProvider: React.FC = ({ children }) => {
       dispatchError(user, e);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      if (currentUser) {
+        try {
+          await getCurrentContacts();
+        } catch (e) {
+          const user = new Error('Sorry, now we cannot get your contacts. Please try again or contact with our support!');
+          dispatchError(user, e);
+        }
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
 
   const object: contactsTypes = {
     contacts,
