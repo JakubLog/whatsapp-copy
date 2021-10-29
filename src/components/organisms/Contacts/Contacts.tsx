@@ -1,5 +1,6 @@
 import { nanoid } from '@reduxjs/toolkit';
 import Contact from 'components/molecules/Contact/Contact';
+import CreateNewMessage from 'components/molecules/CreateNewMessage/CreateNewMessage';
 import Error from 'components/molecules/Error/Error';
 import Loading from 'components/molecules/Loading/Loading';
 import { format } from 'date-fns';
@@ -12,13 +13,22 @@ const Contacts: React.FC = () => {
   const { error } = useError();
   const { contacts, loading } = useContacts();
 
+  console.log(contacts);
   return (
     <Wrapper>
       {loading ? (
         <Loading />
+      ) : contacts.length <= 0 ? (
+        <CreateNewMessage />
       ) : (
         contacts.map(({ name, image, lastMsg: { value, date } }) => (
-          <Contact key={nanoid()} date={format(Number(date.toDate()), 'dd-MM-yyyy')} lastMsg={value} name={name} img={image} />
+          <Contact
+            key={nanoid()}
+            date={typeof date !== 'string' ? format(Number(date.toDate()), 'dd-MM-yyyy') : ''}
+            lastMsg={value}
+            name={name}
+            img={image}
+          />
         ))
       )}
       {error && <Error message={error} />}

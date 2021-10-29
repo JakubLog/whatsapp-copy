@@ -122,6 +122,7 @@ const MessagesProvider: React.FC = ({ children }) => {
       docs.forEach((doc) => {
         records.push({ date: doc.get('date'), value: doc.get('value') });
       });
+      if (records.length === 0) records.push({ value: 'Write your first message!', date: '' });
       return {
         value: records[0].value,
         date: records[0].date
