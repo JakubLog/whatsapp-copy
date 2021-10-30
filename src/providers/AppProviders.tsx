@@ -8,6 +8,7 @@ import MessagesProvider from 'hooks/useMessages';
 import ErrorProvider from 'hooks/useError';
 import ContactsProvider from 'hooks/useContacts';
 import AuthProvider from 'hooks/useAuth';
+import SearchProvider from 'hooks/useSearch';
 
 const AppProviders: React.FC = ({ children }) => {
   return (
@@ -16,10 +17,12 @@ const AppProviders: React.FC = ({ children }) => {
         <AuthProvider>
           <MessagesProvider>
             <ContactsProvider>
-              <ThemeProvider theme={theme}>
-                <GlobalStyles />
-                {children}
-              </ThemeProvider>
+              <SearchProvider>
+                <ThemeProvider theme={theme}>
+                  <GlobalStyles />
+                  {children}
+                </ThemeProvider>
+              </SearchProvider>
             </ContactsProvider>
           </MessagesProvider>
         </AuthProvider>

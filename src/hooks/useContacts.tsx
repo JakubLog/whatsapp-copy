@@ -10,6 +10,7 @@ interface contactsTypes {
   contacts: any[];
   loading: boolean;
   addContact: (email: string) => any;
+  getCurrentContacts: (hasReturned?: boolean) => Promise<void | any[]>;
 }
 
 const initialObject: contactsTypes = {
@@ -18,7 +19,8 @@ const initialObject: contactsTypes = {
   addContact: (email: string) =>
     Promise.resolve({
       response: email
-    })
+    }),
+  getCurrentContacts: (hasReturned = false) => Promise.resolve(console.log(hasReturned))
 };
 
 const ContactsContext = createContext<contactsTypes>(initialObject);
@@ -29,7 +31,7 @@ const ContactsProvider: React.FC = ({ children }) => {
   const { dispatchError } = useError();
   const { getLastMsgInfo } = useMessages();
 
-  const getCurrentContacts = async () => {
+  const getCurrentContacts = async (hasReturned = false) => {
     setLoadingState(true);
     const response = await getDocs(collection(db, `PROFILES/${currentUser.id}/contacts`));
     const convertedArray: any[] = [];
@@ -38,6 +40,10 @@ const ContactsProvider: React.FC = ({ children }) => {
     for await (const snapshot of convertedArray) {
       const lastMsg = await getLastMsgInfo(snapshot.get('name'));
       temp.push({ id: snapshot.get('id'), name: snapshot.get('name'), image: snapshot.get('image'), lastMsg });
+    }
+    if (hasReturned) {
+      setLoadingState(false);
+      return temp;
     }
     setContacts(temp);
     setLoadingState(false);
@@ -119,7 +125,8 @@ const ContactsProvider: React.FC = ({ children }) => {
   const object: contactsTypes = {
     contacts,
     loading,
-    addContact
+    addContact,
+    getCurrentContacts
   };
 
   return <ContactsContext.Provider value={object}>{children}</ContactsContext.Provider>;

@@ -4,7 +4,7 @@ import { Wrapper } from './ProfileImage.styles';
 import { Image } from 'components/atoms/Image/Image';
 
 interface props {
-  src: string;
+  src?: string;
   size?: number;
 }
 
@@ -20,7 +20,7 @@ const ProfileImage: React.FC<props> = ({
 };
 
 ProfileImage.propTypes = {
-  src: PropTypes.string.isRequired,
+  src: PropTypes.string,
   size: PropTypes.number
 };
 
