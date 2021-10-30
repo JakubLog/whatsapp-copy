@@ -24,7 +24,7 @@ const CreateNewMessage: React.FC = () => {
     <Wrapper>
       <Title>Utwórz nową konwersację</Title>
       <Form onSubmit={handleSubmit(process)}>
-        <Input placeholder="example@mail.com" {...register('email', { required: true })} />
+        <Input placeholder="Fullname" {...register('email', { required: true })} />
         <Button>{message}</Button>
       </Form>
     </Wrapper>
