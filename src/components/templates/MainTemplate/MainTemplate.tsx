@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import FormField from 'components/molecules/FormField/FormField';
 import { Form } from 'components/atoms/Form/Form';
 import { Button } from 'components/atoms/Button/Button';
+import { ErrorParagraph } from 'components/atoms/ErrorParagraph/ErrorParagraph';
 
 const MainTemplate: React.FC = () => {
   const { currentUser, signIn, loading, createAccount } = useAuth();
@@ -68,7 +69,7 @@ const MainTemplate: React.FC = () => {
           <Form onSubmit={handleSubmit(loginInProcess)}>
             <FormField placeholder="your@mail.com" label="email" {...register('email', { required: true })} />
             <FormField label="password" type="password" {...register('password', { required: true })} />
-            {(errors.email || errors.password) && <p>Wszystkie pola muszą być uzupełnione!</p>}
+            {(errors.email || errors.password) && <ErrorParagraph>Wszystkie pola muszą być uzupełnione!</ErrorParagraph>}
             <Button>{loading ? 'Ładowanie...' : isError ? 'Spróbuj ponownie!' : 'Zaloguj się'}</Button>
           </Form>
           <Form onSubmit={handleSubmitTwo(createAccountProcess)}>
@@ -76,7 +77,9 @@ const MainTemplate: React.FC = () => {
             <FormField placeholder="example@mail.com" label="email" {...registerTwo('newEmail', { required: true })} />
             <FormField label="password" type="password" {...registerTwo('newPassword', { required: true })} />
             <FormField placeholder="Optional: link to photo" label="image" type="url" {...registerTwo('image', { required: false })} />
-            {(errorsTwo.newEmail || errorsTwo.newPassword || errorsTwo.name) && <p>Trzy pierwsze pola muszą być uzupełnione!</p>}
+            {(errorsTwo.newEmail || errorsTwo.newPassword || errorsTwo.name) && (
+              <ErrorParagraph>Trzy pierwsze pola muszą być uzupełnione!</ErrorParagraph>
+            )}
             <Button>{loading ? 'Ładowanie...' : isErrorTwo ? 'Coś nie tak...' : 'Stwórz konto'}</Button>
           </Form>
         </AuthWrapper>
