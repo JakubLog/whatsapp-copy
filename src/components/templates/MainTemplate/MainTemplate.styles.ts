@@ -10,11 +10,3 @@ export const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 30% 70%;
 `;
-
-export const AuthWrapper = styled.div`
-  grid-column: 1/3;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
