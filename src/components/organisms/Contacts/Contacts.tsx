@@ -24,8 +24,9 @@ const Contacts: React.FC = () => {
         ) : (
           <>
             {response.length !== 0 ? (
-              response.map(({ name, image, lastMsg: { value, date } }) => (
+              response.map(({ name, id, image, lastMsg: { value, date } }) => (
                 <Contact
+                  contactId={id}
                   key={nanoid()}
                   date={typeof date !== 'string' ? format(Number(date.toDate()), 'dd-MM-yyyy') : ''}
                   lastMsg={value}
@@ -48,8 +49,9 @@ const Contacts: React.FC = () => {
       ) : contacts.length <= 0 ? (
         <CreateNewMessage />
       ) : (
-        contacts.map(({ name, image, lastMsg: { value, date } }) => (
+        contacts.map(({ name, id, image, lastMsg: { value, date } }) => (
           <Contact
+            contactId={id}
             key={nanoid()}
             date={typeof date !== 'string' ? format(Number(date.toDate()), 'dd-MM-yyyy') : ''}
             lastMsg={value}

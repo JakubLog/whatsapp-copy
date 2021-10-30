@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, createContext, useState, useContext } from 'react';
-import { addDoc, collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { db } from 'firebase';
 import { useError } from './useError';
 import { useMessages } from 'hooks/useMessages';
 import { useAuth } from './useAuth';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeChat, storeResponse, storeRoot } from 'store';
 
 interface contactsTypes {
   contacts: any[];
   loading: boolean;
   addContact: (email: string) => any;
+  removeContact: () => Promise<void>;
   getCurrentContacts: (hasReturned?: boolean) => Promise<void | any[]>;
 }
 
@@ -20,6 +23,7 @@ const initialObject: contactsTypes = {
     Promise.resolve({
       response: email
     }),
+  removeContact: () => Promise.resolve(console.log('Method is not in context!')),
   getCurrentContacts: (hasReturned = false) => Promise.resolve(console.log(hasReturned))
 };
 
@@ -30,6 +34,7 @@ const ContactsProvider: React.FC = ({ children }) => {
   const [loading, setLoadingState] = useState(true);
   const { dispatchError } = useError();
   const { getLastMsgInfo } = useMessages();
+  const dispatch = useDispatch();
 
   const getCurrentContacts = async (hasReturned = false) => {
     setLoadingState(true);
@@ -41,6 +46,7 @@ const ContactsProvider: React.FC = ({ children }) => {
       const lastMsg = await getLastMsgInfo(snapshot.get('name'));
       temp.push({ id: snapshot.get('id'), name: snapshot.get('name'), image: snapshot.get('image'), lastMsg });
     }
+    dispatch(changeChat(null));
     if (hasReturned) {
       setLoadingState(false);
       return temp;
@@ -108,6 +114,45 @@ const ContactsProvider: React.FC = ({ children }) => {
     }
   };
 
+  const activeContactName = useSelector<storeRoot, storeResponse | null>((store) => store.chat);
+  const removeContact = async () => {
+    try {
+      const messagesRef = collection(db, `MESSAGES`);
+      const q_id = query(
+        messagesRef,
+        where('owners', 'in', [
+          [currentUser.name, activeContactName?.name],
+          [activeContactName?.name, currentUser.name]
+        ])
+      );
+      let id = '';
+      await getDocs(q_id).then((docs) => {
+        docs.forEach((doc) => {
+          id = doc.id;
+        });
+      });
+      await deleteDoc(doc(db, `MESSAGES/${id}`));
+      const q_contact_f = query(collection(db, `PROFILES/${activeContactName?.id}/contacts`), where('name', '==', currentUser.name));
+      const q_contact_t = query(collection(db, `PROFILES/${currentUser.id}/contacts`), where('name', '==', activeContactName?.name));
+      await getDocs(q_contact_f).then((docs) => {
+        docs.forEach((doc) => {
+          id = doc.id;
+        });
+      });
+      await deleteDoc(doc(db, `PROFILES/${activeContactName?.id}/contacts/${id}`));
+      await getDocs(q_contact_t).then((docs) => {
+        docs.forEach((doc) => {
+          id = doc.id;
+        });
+      });
+      await deleteDoc(doc(db, `PROFILES/${currentUser.id}/contacts/${id}`));
+      getCurrentContacts();
+    } catch (e) {
+      const user = new Error('Sorry, something went wrong with removing your contact. Please try again or contact with our support!');
+      dispatchError(user, e);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       if (currentUser) {
@@ -126,7 +171,8 @@ const ContactsProvider: React.FC = ({ children }) => {
     contacts,
     loading,
     addContact,
-    getCurrentContacts
+    getCurrentContacts,
+    removeContact
   };
 
   return <ContactsContext.Provider value={object}>{children}</ContactsContext.Provider>;

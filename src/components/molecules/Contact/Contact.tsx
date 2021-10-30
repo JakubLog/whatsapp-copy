@@ -11,17 +11,19 @@ interface props {
   name: string;
   lastMsg: string;
   date: string;
+  contactId: string;
 }
 
 const Contact: React.FC<props> = ({
   name,
   lastMsg,
   date,
+  contactId,
   img = 'https://st4.depositphotos.com/4329009/19956/v/600/depositphotos_199564354-stock-illustration-creative-vector-illustration-default-avatar.jpg'
 }) => {
   const dispatch = useDispatch();
   return (
-    <Wrapper tabIndex={0} title={name} onClick={() => dispatch(changeChat({ name, img }))}>
+    <Wrapper tabIndex={0} title={name} onClick={() => dispatch(changeChat({ name, img, id: contactId }))}>
       <ImageWrapper>
         <ProfileImage src={img} size={48} />
       </ImageWrapper>
@@ -41,7 +43,8 @@ Contact.propTypes = {
   img: PropTypes.string,
   name: PropTypes.string.isRequired,
   lastMsg: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired
+  date: PropTypes.string.isRequired,
+  contactId: PropTypes.string.isRequired
 };
 
 export default Contact;

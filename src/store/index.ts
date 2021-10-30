@@ -6,7 +6,7 @@ const chatSlice = createSlice({
   initialState: chatState,
   reducers: {
     changeChat(state, action) {
-      return action.payload || console.error('Something went wrong with chat...');
+      return action.payload;
     }
   }
 });
@@ -23,5 +23,6 @@ const typeStore = store.getState();
 export interface storeResponse {
   img?: string;
   name?: string;
+  id?: string;
 }
 export type storeRoot = typeof typeStore;
