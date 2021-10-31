@@ -1,4 +1,5 @@
 import Contacts from 'components/organisms/Contacts/Contacts';
+import InformationSlider from 'components/templates/InfromationSlider/InformationSlider';
 import Profile from 'components/organisms/Profile/Profile';
 import Searchbar from 'components/organisms/Searchbar/Searchbar';
 import React from 'react';
@@ -10,6 +11,7 @@ const Sidebar: React.FC = () => {
       <Profile />
       <Searchbar />
       <Contacts />
+      <InformationSlider />
     </Wrapper>
   );
 };

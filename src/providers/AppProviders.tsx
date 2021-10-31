@@ -9,6 +9,7 @@ import ErrorProvider from 'hooks/useError';
 import ContactsProvider from 'hooks/useContacts';
 import AuthProvider from 'hooks/useAuth';
 import SearchProvider from 'hooks/useSearch';
+import SliderProvider from 'hooks/useSlider';
 
 const AppProviders: React.FC = ({ children }) => {
   return (
@@ -18,10 +19,12 @@ const AppProviders: React.FC = ({ children }) => {
           <MessagesProvider>
             <ContactsProvider>
               <SearchProvider>
-                <ThemeProvider theme={theme}>
-                  <GlobalStyles />
-                  {children}
-                </ThemeProvider>
+                <SliderProvider>
+                  <ThemeProvider theme={theme}>
+                    <GlobalStyles />
+                    {children}
+                  </ThemeProvider>
+                </SliderProvider>
               </SearchProvider>
             </ContactsProvider>
           </MessagesProvider>

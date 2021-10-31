@@ -5,9 +5,12 @@ import Option from 'components/molecules/Option/Option';
 import { useAuth } from 'hooks/useAuth';
 import { changeChat } from 'store';
 import { useDispatch } from 'react-redux';
+import { useSlider } from 'hooks/useSlider';
+import Settings from '../Settings/Settings';
 
 const Options: React.FC = () => {
   const { logout } = useAuth();
+  const { openSlider } = useSlider();
   const dispatch = useDispatch();
 
   return (
@@ -19,7 +22,9 @@ const Options: React.FC = () => {
         <a href="#">Nowa grupa</a>
         <a href="#">Zarchiwizowane</a>
         <a href="#">Oznaczone gwiazdką</a>
-        <a href="#">Ustawienia</a>
+        <a href="#" onClick={() => openSlider(<Settings />, 'Ustawienia')}>
+          Ustawienia
+        </a>
         <a
           href="#"
           onClick={() => {
