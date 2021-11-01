@@ -9,15 +9,18 @@ import { useForm } from 'react-hook-form';
 const CreateNewMessage: React.FC = () => {
   const { addContact } = useContacts();
   const [message, setMessage] = useState("Let's talk!");
+  const [loading, setLoadingState] = useState(false);
   const { handleSubmit, register } = useForm();
 
   const process = async ({ email }: { email: string }) => {
+    setLoadingState(true);
     const response = await addContact(email);
     if (response?.code === 201) {
       setMessage('Poprawnie dodano!');
     } else {
-      setMessage('Nie ma takiego użytkownika!');
+      setMessage('Spróbuj ponownie!');
     }
+    setLoadingState(false);
   };
 
   return (
@@ -25,7 +28,7 @@ const CreateNewMessage: React.FC = () => {
       <Title>Utwórz nową konwersację</Title>
       <Form onSubmit={handleSubmit(process)}>
         <Input placeholder="Fullname" {...register('email', { required: true })} />
-        <Button>{message}</Button>
+        <Button>{loading ? 'Loading...' : message}</Button>
       </Form>
     </Wrapper>
   );
