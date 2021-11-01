@@ -58,8 +58,10 @@ const ContactsProvider: React.FC = ({ children }) => {
   const checkContact = async (contactName: string): Promise<{ code: number; id?: string; name?: string; image?: string }> => {
     try {
       const q = query(collection(db, 'PROFILES'), where('name', '==', contactName));
+      const q_c = query(collection(db, `PROFILES/${currentUser.id}/contacts`), where('name', '==', contactName));
+      const isExist = await getDocs(q_c);
       const response = await getDocs(q);
-      if (response.docs.length === 1) {
+      if (response.docs.length === 1 && isExist.docs.length === 0) {
         let object = {};
         response.forEach((doc) => {
           object = { id: doc.get('id'), email: doc.get('email'), image: doc.get('image') };
@@ -76,6 +78,7 @@ const ContactsProvider: React.FC = ({ children }) => {
 
   const addContact = async (contactName: string) => {
     try {
+      if (contactName === currentUser.name) return;
       const response = await checkContact(contactName);
       if (response.code === 200) {
         const newContactPath = collection(db, `PROFILES/${currentUser.id}/contacts`);

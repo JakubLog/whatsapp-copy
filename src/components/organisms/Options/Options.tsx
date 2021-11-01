@@ -7,6 +7,7 @@ import { changeChat } from 'store';
 import { useDispatch } from 'react-redux';
 import { useSlider } from 'hooks/useSlider';
 import Settings from '../Settings/Settings';
+import CreateNewMessage from 'components/molecules/CreateNewMessage/CreateNewMessage';
 
 const Options: React.FC = () => {
   const { logout } = useAuth();
@@ -16,7 +17,9 @@ const Options: React.FC = () => {
   return (
     <Wrapper>
       <Option iconSrc="https://cdn3.iconfinder.com/data/icons/project-management-32/48/11-512.png">
-        <a href="#">Stwórz wiadomość</a>
+        <a href="#" onClick={() => openSlider(<CreateNewMessage />, 'Nowa wiadomość')}>
+          Stwórz wiadomość
+        </a>
       </Option>
       <Option iconSrc="https://cdn3.iconfinder.com/data/icons/user-interface-1-10/24/icon-ui-1-options-512.png">
         <a href="#">Nowa grupa</a>
