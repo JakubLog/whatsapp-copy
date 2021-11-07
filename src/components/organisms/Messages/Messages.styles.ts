@@ -3,12 +3,33 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   overflow-y: auto;
   background-color: #e5ddd5;
-  padding-top: 30px;
+  padding-block: 30px;
   padding-inline: 90px;
   & > * {
     &:not(:last-child) {
       margin-bottom: 20px;
     }
+  }
+  p {
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    opacity: 0.4;
+    width: fit-content;
+    margin: 0 auto;
+    padding-inline: 30px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 10px;
+  }
+  ::-webkit-scrollbar {
+    width: 7px;
+    background-color: #eee;
+    overflow: hidden;
+  }
+  ::-webkit-scrollbar-thumb {
+    opacity: 0.8;
+    background-color: ${({ theme }) => theme.colors.blue};
   }
 `;
 

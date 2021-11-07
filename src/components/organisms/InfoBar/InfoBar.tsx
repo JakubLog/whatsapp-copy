@@ -4,14 +4,23 @@ import { Wrapper, Information } from './InfoBar.styles';
 import ProfileImage from 'components/molecules/ProfileImage/ProfileImage';
 import { ContactName } from 'components/atoms/ContactName/ContactName';
 import Option from '../../molecules/Option/Option';
+import { storeResponse, storeRoot } from 'store';
+import { useSelector } from 'react-redux';
+import { useContacts } from 'hooks/useContacts';
+
+const defaultProfileImage =
+  'https://st4.depositphotos.com/4329009/19956/v/600/depositphotos_199564354-stock-illustration-creative-vector-illustration-default-avatar.jpg';
 
 const InfoBar: React.FC = () => {
+  const state = useSelector<storeRoot, storeResponse | null>((store) => store.chat);
+  const { removeContact } = useContacts();
+
   return (
     <Wrapper>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <ProfileImage src="https://picsum.photos/100" size={40} />
+        <ProfileImage src={state?.img || defaultProfileImage} size={40} />
         <Information>
-          <ContactName>Jakub Michał Fedoszczak</ContactName>
+          <ContactName>{state?.name}</ContactName>
         </Information>
       </div>
       <div>
@@ -20,7 +29,9 @@ const InfoBar: React.FC = () => {
           <a href="#">Wybierz wiadomości</a>
           <a href="#">Wycisz powiadomienia</a>
           <a href="#">Wyczyść wiadomości</a>
-          <a href="#">Usuń czat</a>
+          <a href="#" onClick={removeContact}>
+            Usuń czat
+          </a>
         </Option>
       </div>
     </Wrapper>
