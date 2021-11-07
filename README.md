@@ -12,7 +12,7 @@
 
 <img src="https://socialify.git.ci/JakubLog/whatsapp-copy/image?description=1&font=Inter&language=1&owner=1&pattern=Charlie%20Brown&theme=Dark" alt="whatsapp-copy" width="640" height="320"/>
 
-Let's talk together! 🥇 Just register in this chat application and you can enjoy! 😄
+Let's talk together! 🥇 Just register in this whatsapp copy app and enjoy! 😄
 
 Mobile version: no 🚫
 
