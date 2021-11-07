@@ -19,7 +19,7 @@ Mobile version: no 🚫
 PageInsights scores:
 
 - Mobile: **not supporting**
-- Desktop: **not now**
+- [Desktop](https://developers.google.com/speed/pagespeed/insights/?hl=pl&url=https%3A%2F%2Fjakublog.github.io%2Fwhatsapp-copy%2F&tab=desktop): **100/100**
 
 ### How can I try it? 🤔
 
@@ -64,6 +64,12 @@ And that's all!
 
 All of styles and views are designed by Author. <br/>
 Colors were selected by Author too. <br/>
+
+![image](https://user-images.githubusercontent.com/77537823/140657675-c20020b7-d138-4771-b9bb-58a334e6be26.png)
+![image](https://user-images.githubusercontent.com/77537823/140657711-407693b7-d9ad-4eef-82e2-ea653b61020d.png)
+![image](https://user-images.githubusercontent.com/77537823/140657748-5227af70-8c71-4eee-ace2-12bda249750c.png)
+![image](https://user-images.githubusercontent.com/77537823/140657758-1f3dba94-4896-4dcd-87a7-f74a0ecd35ed.png)
+
 
 ## Project structure 💡
 
