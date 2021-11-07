@@ -1,6 +1,7 @@
 {
   "name": "whatsapp-copy",
   "version": "0.1.0",
+  "homepage": "https://jakublog.github.io/whatsapp-copy/",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
@@ -27,7 +28,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "react-scripts build",
+    "deploy": "gh-pages -b publish -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -52,6 +55,7 @@
     "@types/styled-components": "^5.1.15",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "gh-pages": "^3.2.3",
     "prettier": "^2.4.1"
   }
 }
