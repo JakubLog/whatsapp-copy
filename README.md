@@ -1,46 +1,78 @@
-# Getting Started with Create React App
+# Whatsapp application clone 🤯
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div style="display: flex;">
+  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/jakublog/whatsapp-copy">
+  <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/jakublog/whatsapp-copy">
+</div>
+<div style="display: flex;">
+  <img alt="GitHub package.json dependency version (prod)" src="https://img.shields.io/github/package-json/dependency-version/jakublog/whatsapp-copy/react">
+</div>
 
-## Available Scripts
+## About ✍️
 
-In the project directory, you can run:
+<img src="https://socialify.git.ci/JakubLog/whatsapp-copy/image?description=1&font=Inter&language=1&owner=1&pattern=Charlie%20Brown&theme=Dark" alt="whatsapp-copy" width="640" height="320"/>
 
-### `npm start`
+Let's talk together! 🥇 Just register in this chat application and you can enjoy! 😄
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Mobile version: no 🚫
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+PageInsights scores:
 
-### `npm test`
+- Mobile: **not supporting**
+- Desktop: **not now**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### How can I try it? 🤔
 
-### `npm run build`
+Try now on: https://jakublog.github.io/whatsapp-copy/
+Test Login Details:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Login: test123@test.com 👈
+- Password: test123456 👈
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Instalation steps 🛠️
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Copy this repository
 
-### `npm run eject`
+```
+gh repo clone JakubLog/whatsapp-copy
+cd ./whatsapp-copy
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+or
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+git clone https://github.com/JakubLog/whatsapp-copy.git
+cd ./whatsapp-copy
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+2. Install required packages
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+npm install
+```
 
-## Learn More
+3. Open App in Development mode
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+npm start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Open https://localhost:3000 to view in the browser.
+And that's all!
+
+## About UX/UI 🖌️
+
+All of styles and views are designed by Author. <br/>
+Colors were selected by Author too. <br/>
+
+## Project structure 💡
+
+It's small project based on atomic design. 😄
+
+## Technological facilities 👷
+
+Application is based on React (JavaScript) and integrations with Firebase. <br/>
+To authorizate new and existing users I used Firebase Auth with Google Integration. <br/>
+All messages are stored in Firestore (NoSQL Database) and based on live reloading Snapshots. 🔥
+
+This medium project is hosted on GitHub Pages with SSL protocol. ✨
