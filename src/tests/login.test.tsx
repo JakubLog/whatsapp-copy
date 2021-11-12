@@ -9,9 +9,9 @@ describe('Login protocol & UI test', () => {
   it('Checks validation on front-end', async () => {
     render(<LoginForm />);
     const email = screen.getByLabelText('Email');
-    const pass = screen.getByLabelText('Password');
+    const pass = screen.getByLabelText(/password/i);
     const submit = screen.getByRole('button');
-    fireEvent.change(email, { target: { value: 'test123@mail.com' } });
+    fireEvent.change(email, { target: { value: 'test123@test.com' } });
     submit.click();
     expect(await screen.findByText('Wszystkie pola muszą być uzupełnione!')).toBeInTheDocument();
     fireEvent.change(pass, { target: { value: 'test123456' } });
