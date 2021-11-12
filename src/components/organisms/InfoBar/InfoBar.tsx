@@ -24,12 +24,12 @@ const InfoBar: React.FC = () => {
         </Information>
       </div>
       <div>
-        <Option iconSrc="https://cdn3.iconfinder.com/data/icons/user-interface-1-10/24/icon-ui-1-options-512.png">
+        <Option data-testid="optionsForContact" iconSrc="https://cdn3.iconfinder.com/data/icons/user-interface-1-10/24/icon-ui-1-options-512.png">
           <a href="#">Informacje o kontakcie</a>
           <a href="#">Wybierz wiadomości</a>
           <a href="#">Wycisz powiadomienia</a>
           <a href="#">Wyczyść wiadomości</a>
-          <a href="#" onClick={removeContact}>
+          <a href="#" data-testid="removeContact" onClick={removeContact}>
             Usuń czat
           </a>
         </Option>

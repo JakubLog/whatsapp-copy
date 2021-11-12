@@ -16,8 +16,8 @@ const Options: React.FC = () => {
 
   return (
     <Wrapper>
-      <Option iconSrc="https://cdn3.iconfinder.com/data/icons/project-management-32/48/11-512.png">
-        <a href="#" onClick={() => openSlider(<CreateNewMessage />, 'Nowa wiadomość')}>
+      <Option data-testid="optionsForProfile" iconSrc="https://cdn3.iconfinder.com/data/icons/project-management-32/48/11-512.png">
+        <a data-testid="createMessage" href="#" onClick={() => openSlider(<CreateNewMessage />, 'Nowa wiadomość')}>
           Stwórz wiadomość
         </a>
       </Option>

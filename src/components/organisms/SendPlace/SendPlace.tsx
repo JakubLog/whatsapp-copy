@@ -26,7 +26,7 @@ const SendPlace: React.FC = () => {
       <Icon src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Ic_attach_file_48px.svg/1200px-Ic_attach_file_48px.svg.png" />
       <form onSubmit={handleSubmit(process)}>
         <StyledInput placeholder="Wpisz tutaj wiadomość..." {...register('value', { required: true })} />
-        <Icon src="https://static.thenounproject.com/png/488906-200.png" />
+        <Icon data-testid="sendButton" src="https://static.thenounproject.com/png/488906-200.png" />
       </form>
     </Wrapper>
   );

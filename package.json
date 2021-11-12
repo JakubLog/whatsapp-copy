@@ -26,6 +26,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "test:e2e": "cypress open --project ./src/e2e",
     "test": "react-scripts test --verbose ./src/tests",
     "eject": "react-scripts eject"
   },
@@ -48,9 +49,12 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/cypress": "^8.0.1",
     "@types/react-router-dom": "^5.3.1",
     "@types/styled-components": "^5.1.15",
+    "cypress": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.4.1"
   }
