@@ -7,11 +7,11 @@ interface props {
   iconSrc: string;
 }
 
-const Option: React.FC<props> = ({ children, iconSrc }) => {
+const Option: React.FC<props> = ({ children, iconSrc, ...rest }) => {
   const [isOpen, setOpenState] = useState(false);
 
   return (
-    <Wrapper onClick={() => setOpenState((prev) => !prev)}>
+    <Wrapper onClick={() => setOpenState((prev) => !prev)} {...rest}>
       <Icon src={iconSrc} />
       {isOpen && <List>{children}</List>}
     </Wrapper>
