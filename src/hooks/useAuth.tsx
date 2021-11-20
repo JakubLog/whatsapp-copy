@@ -1,7 +1,8 @@
+import { logEvent, setUserId, setUserProperties } from '@firebase/analytics';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut, User, UserCredential } from '@firebase/auth';
 import { collection, getDocs, setDoc } from '@firebase/firestore';
 import { nanoid } from '@reduxjs/toolkit';
-import { auth, db } from 'firebase';
+import { analytics, auth, db } from 'firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, query, where } from 'firebase/firestore';
 import React, { createContext, useContext, useEffect, useState } from 'react';
@@ -45,6 +46,9 @@ const AuthProvider: React.FC = ({ children }) => {
               };
             });
             const readyUser = { ...user, ...temp };
+            logEvent(analytics, 'user_login');
+            setUserProperties(analytics, readyUser);
+            setUserId(analytics, readyUser.uid);
             setCurrentUser(readyUser);
           } else {
             setCurrentUser(null);
@@ -74,6 +78,7 @@ const AuthProvider: React.FC = ({ children }) => {
       email
     };
     await setDoc(doc(db, `PROFILES/${createdUserId}`), image ? Object.assign(preparedUserObject, { image }) : preparedUserObject);
+    logEvent(analytics, 'user_create', { createdUserId, email });
   };
 
   const object: authTypes = {

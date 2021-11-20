@@ -5,6 +5,8 @@ import { Button } from 'components/atoms/Button/Button';
 import { ErrorParagraph } from 'components/atoms/ErrorParagraph/ErrorParagraph';
 import { Form } from 'components/atoms/Form/Form';
 import FormField from 'components/molecules/FormField/FormField';
+import { logEvent } from '@firebase/analytics';
+import { analytics } from 'firebase';
 
 const RegisterForm: React.FC = () => {
   const [isError, setError] = useState(false);
@@ -32,6 +34,7 @@ const RegisterForm: React.FC = () => {
       reset();
     } catch (e) {
       setError(true);
+      logEvent(analytics, 'register_error');
       // console.error(e);
     }
   };
