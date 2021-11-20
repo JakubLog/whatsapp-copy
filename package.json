@@ -1,6 +1,7 @@
 {
   "name": "whatsapp-copy",
   "version": "0.1.0",
+  "homepage": "https://jakublog.github.io/whatsapp-copy/",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
@@ -56,6 +57,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-prettier": "^4.0.0",
+    "gh-pages": "^3.2.3",
     "prettier": "^2.4.1"
   }
 }
